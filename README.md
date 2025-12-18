@@ -2,9 +2,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Run 
+First, run the development server from the `realestate` directory
 
 ```bash
+npm install 
 npm run dev
 # or
 yarn dev
