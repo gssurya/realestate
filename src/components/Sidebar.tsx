@@ -39,7 +39,7 @@ export function Sidebar() {
         <div className="flex flex-col h-full bg-slate-900 text-white w-64 border-r border-slate-800">
             <div className="p-6">
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                    Guaq AI
+                    Rooxy AI
                 </h1>
             </div>
 

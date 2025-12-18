@@ -13,6 +13,8 @@ datasource db {
 model Lead {
   id        String   @id @default(cuid())
   name      String   @default("New Lead")
+  email     String?
+  phone     String?
   platform  String   @default("Web")
   status    String   @default("NEW") // STOP AI, FOLLOW UP, CLOSED
   interest  String?

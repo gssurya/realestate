@@ -6,7 +6,7 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
       <div className="space-y-6 text-center max-w-2xl">
         <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-          Guaq AI Broker
+          Rooxy AI Broker
         </h1>
         <p className="text-slate-400 text-xl">
           The world's most advanced AI real estate broker. Experience the future of property dealing.

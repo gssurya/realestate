@@ -1,8 +1,9 @@
 import { Wrench } from "lucide-react";
 
-export default function GenericPage({ params }: { params: { slug: string } }) {
+export default async function GenericPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     // Simple capitalization
-    const title = params.slug.charAt(0).toUpperCase() + params.slug.slice(1);
+    const title = slug.charAt(0).toUpperCase() + slug.slice(1);
 
     return (
         <div className="flex flex-col items-center justify-center h-[60vh] text-center space-y-4">
