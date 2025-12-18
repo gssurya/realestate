@@ -98,15 +98,29 @@ export default function LeadsPage() {
                                             <td className="p-4 align-middle text-left">{lead.score}</td>
                                             <td className="p-4 align-middle text-right">
                                                 <div className="flex items-center justify-end gap-1 text-slate-500">
-                                                    <button title="Call" disabled={!lead.phone} className="p-2 hover:bg-green-50 hover:text-green-600 rounded-md transition-colors disabled:opacity-20">
+                                                    <a
+                                                        href={lead.phone ? `tel:${lead.phone}` : undefined}
+                                                        title="Call"
+                                                        className={`p-2 hover:bg-green-50 hover:text-green-600 rounded-md transition-colors ${!lead.phone ? 'opacity-20 pointer-events-none' : ''}`}
+                                                    >
                                                         <Phone size={16} />
-                                                    </button>
-                                                    <button title="Email" disabled={!lead.email} className="p-2 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors disabled:opacity-20">
+                                                    </a>
+                                                    <a
+                                                        href={lead.email ? `mailto:${lead.email}` : undefined}
+                                                        title="Email"
+                                                        className={`p-2 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors ${!lead.email ? 'opacity-20 pointer-events-none' : ''}`}
+                                                    >
                                                         <Mail size={16} />
-                                                    </button>
-                                                    <button title="WhatsApp" disabled={!lead.phone} className="p-2 hover:bg-emerald-50 hover:text-emerald-600 rounded-md transition-colors disabled:opacity-20">
+                                                    </a>
+                                                    <a
+                                                        href={lead.phone ? `https://wa.me/${lead.phone.replace(/\D/g, '')}` : undefined}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        title="WhatsApp"
+                                                        className={`p-2 hover:bg-emerald-50 hover:text-emerald-600 rounded-md transition-colors ${!lead.phone ? 'opacity-20 pointer-events-none' : ''}`}
+                                                    >
                                                         <MessageCircle size={16} />
-                                                    </button>
+                                                    </a>
                                                     <div className="w-px h-4 bg-slate-200 mx-1" />
                                                     <button title="Delete Lead" className="p-2 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors">
                                                         <Trash2 size={16} />
