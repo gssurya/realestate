@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Eye, Mail, Trash2, Phone, MessageCircle } from "lucide-react";
+import { Eye, Mail, Trash2, Phone, MessageCircle, Check, X } from "lucide-react";
 
 type Lead = {
     id: string;
@@ -20,8 +20,16 @@ type Lead = {
 export default function LeadsPage() {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
+    const [editingLeadId, setEditingLeadId] = useState<string | null>(null);
+    const [pendingStatus, setPendingStatus] = useState<string>("");
+    const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
     useEffect(() => {
+        fetchLeads();
+    }, []);
+
+    const fetchLeads = () => {
+        setLoading(true);
         fetch("/api/leads")
             .then((res) => res.json())
             .then((data) => {
@@ -32,7 +40,29 @@ export default function LeadsPage() {
                 console.error(err);
                 setLoading(false);
             });
-    }, []);
+    };
+
+    const handleStatusUpdate = async (id: string) => {
+        setUpdatingStatus(id);
+        try {
+            const res = await fetch("/api/leads", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, status: pendingStatus }),
+            });
+
+            if (res.ok) {
+                setLeads(leads.map(l => l.id === id ? { ...l, status: pendingStatus } : l));
+                setEditingLeadId(null);
+            } else {
+                console.error("Failed to update status");
+            }
+        } catch (err) {
+            console.error("Error updating status:", err);
+        } finally {
+            setUpdatingStatus(null);
+        }
+    };
 
     return (
         <div className="space-y-6">
@@ -87,13 +117,49 @@ export default function LeadsPage() {
                                             </td>
                                             <td className="p-4 align-middle">{lead.interest || "-"}</td>
                                             <td className="p-4 align-middle">
-                                                <span className={
-                                                    lead.status === "NEW" ? "text-blue-600" :
-                                                        lead.status === "FOLLOW UP" ? "text-orange-600" :
-                                                            "text-slate-600"
-                                                }>
-                                                    {lead.status}
-                                                </span>
+                                                {editingLeadId === lead.id ? (
+                                                    <div className="flex items-center gap-1">
+                                                        <select
+                                                            value={pendingStatus}
+                                                            onChange={(e) => setPendingStatus(e.target.value)}
+                                                            className="text-xs border rounded p-1"
+                                                            disabled={updatingStatus === lead.id}
+                                                        >
+                                                            <option value="NEW">NEW</option>
+                                                            <option value="FOLLOW UP">FOLLOW UP</option>
+                                                            <option value="CLOSED">CLOSED</option>
+                                                            <option value="STOP AI">STOP AI</option>
+                                                        </select>
+                                                        <button
+                                                            onClick={() => handleStatusUpdate(lead.id)}
+                                                            disabled={updatingStatus === lead.id}
+                                                            className="text-green-600 hover:bg-green-50 p-1 rounded transition-colors"
+                                                        >
+                                                            <Check size={14} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setEditingLeadId(null)}
+                                                            disabled={updatingStatus === lead.id}
+                                                            className="text-red-600 hover:bg-red-50 p-1 rounded transition-colors"
+                                                        >
+                                                            <X size={14} />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <span
+                                                        onClick={() => {
+                                                            setEditingLeadId(lead.id);
+                                                            setPendingStatus(lead.status);
+                                                        }}
+                                                        className={`cursor-pointer transition-colors px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${lead.status === "NEW" ? "bg-blue-50 text-blue-600 hover:bg-blue-100" :
+                                                                lead.status === "FOLLOW UP" ? "bg-orange-50 text-orange-600 hover:bg-orange-100" :
+                                                                    lead.status === "STOP AI" ? "bg-red-50 text-red-600 hover:bg-red-100" :
+                                                                        "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                                                            }`}
+                                                    >
+                                                        {lead.status}
+                                                    </span>
+                                                )}
                                             </td>
                                             <td className="p-4 align-middle text-left">{lead.score}</td>
                                             <td className="p-4 align-middle text-right">

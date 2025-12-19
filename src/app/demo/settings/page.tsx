@@ -47,7 +47,7 @@ export default function SettingsPage() {
                         <div className="p-4 bg-slate-50 border rounded-md">
                             <p className="text-sm font-medium mb-2">OpenAI API Key</p>
                             <div className="flex gap-2">
-                                <input type="password" readonly className="flex-1 px-3 py-2 border rounded-md bg-white" value="sk-••••••••••••••••" />
+                                <input type="password" className="flex-1 px-3 py-2 border rounded-md bg-white" value="sk-••••••••••••••••" />
                                 <button className="px-3 py-2 border rounded-md text-sm">Update</button>
                             </div>
                         </div>
